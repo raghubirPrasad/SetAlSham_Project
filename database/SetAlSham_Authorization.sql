@@ -1,15 +1,5 @@
 USE SetAlShamDB;
 
--- ============================================================
--- AUTHORIZATION  (OPTIONAL - run this file LAST)
--- Demonstrates: CREATE ROLE, GRANT, WITH GRANT OPTION,
---               SET DEFAULT ROLE, and REVOKE.
--- NOTE: the account running this must itself be allowed to
---       create roles/users (true for 'root' on a local MySQL).
---       On locked-down shared hosting some lines may error -
---       that is why this is kept in its own optional file.
--- ============================================================
-
 -- 1. Create two roles
 CREATE ROLE IF NOT EXISTS manager_role, waiter_role;
 
@@ -30,7 +20,6 @@ GRANT manager_role TO 'alice_manager'@'localhost';
 GRANT waiter_role  TO 'bob_waiter'@'localhost';
 
 -- 4. Activate the role automatically at login.
---    (In MySQL 8 a granted role stays INACTIVE until it is set as default.)
 SET DEFAULT ROLE manager_role TO 'alice_manager'@'localhost';
 SET DEFAULT ROLE waiter_role  TO 'bob_waiter'@'localhost';
 
@@ -38,15 +27,11 @@ SET DEFAULT ROLE waiter_role  TO 'bob_waiter'@'localhost';
 GRANT SELECT ON SetAlShamDB.* TO 'alice_manager'@'localhost' WITH GRANT OPTION;
 
 -- 6. REVOKE: take a privilege back from a role.
---    (For a WITH GRANT OPTION privilege, MySQL also removes it from anyone
---     it was passed on to - the cascade behaviour.)
 REVOKE INSERT ON SetAlShamDB.* FROM manager_role;
 
--- ============================================================
--- 7. ADDITIONAL ROLES — mirror the admin-panel roles at the
---    database level (Cashier, Waiter already above). These show
---    how panel roles map onto real MySQL privileges.
--- ============================================================
+
+-- 7. ADDITIONAL ROLES — mirror the admin-panel roles at the database level (Cashier, Waiter already above). 
+
 CREATE ROLE IF NOT EXISTS cashier_role;
 
 -- Cashier: works with the sales tables only
